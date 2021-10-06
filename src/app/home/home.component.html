@@ -1,0 +1,114 @@
+<div class="container">
+  <div class="row search-container">
+    <i class="fa fa-search"></i>
+    <input
+      type="text"
+      class="form-control search-bar"
+      placeholder="Search Pets"
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="searchPet()"
+    />
+  </div>
+  <div class="row filter-container">
+    <button class="filter" data-toggle="modal" data-target="#filterModal">
+      <i class="fa fa-filter"></i> filters
+    </button>
+    <button class="filter" (click)="filterByAge('less')">
+      Less than 1 month old
+    </button>
+    <button class="filter" (click)="filterByAge('more')">
+      More than 1 month old
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <ng-container *ngIf="isLoader">
+        <div class="container card-container">
+          <div class="row skeleton-loader loader" style="width: 100%"></div>
+          <div class="row skeleton-loader loader" style="width: 70%"></div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isLoader">
+        <ng-container *ngFor="let pet of petsArr">
+          <app-card [pet]="pet"></app-card>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="petsArr.length == 0">
+        <span *ngIf="!isLoader">No Pets Found..</span>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="filterModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Filters</h4>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div>
+          <span> Order By :</span>
+          <label class="radio-inline radio-css"
+            ><input
+              type="radio"
+              [(ngModel)]="orderType"
+              name="orderby"
+              value="asc"
+            />
+            Asc</label
+          >
+          <label class="radio-inline radio-css"
+            ><input
+              type="radio"
+              [(ngModel)]="orderType"
+              name="orderby"
+              value="desc"
+            />
+            Desc</label
+          >
+        </div>
+        <div>
+          <span> Sort By :</span>
+          <label class="radio-inline radio-css"
+            ><input
+              type="radio"
+              [(ngModel)]="sortType"
+              name="sortby"
+              value="age"
+            />
+            Age</label
+          >
+          <label class="radio-inline radio-css"
+            ><input
+              type="radio"
+              [(ngModel)]="sortType"
+              name="sortby"
+              value="createdAt"
+            />
+            Creation Time</label
+          >
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="submitFilter()"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
